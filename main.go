@@ -31,7 +31,7 @@ func(r *Repository) entryBook(context *fiber.Ctx)error{
 	err := context.BodyParser(&book) // This extracts the Book structure out of the json using the json rules specified the structure definiton
 
 	if (err != nil){
-		log.Fatal("Could not Parse JSON for Book")
+		
 		context.Status(http.StatusUnprocessableEntity).JSON(
 			&fiber.Map{"message":"request failed"},
 		)
@@ -42,7 +42,7 @@ func(r *Repository) entryBook(context *fiber.Ctx)error{
 	err = response.Error
 
 	if (err != nil){
-		log.Fatal("Could not insert into database")
+		
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message":"Could not Create Book"},
 		)
@@ -104,7 +104,7 @@ func (r *Repository) getAllBooks(context *fiber.Ctx) error {
 	// first parameter in find is the destination variable, second parameter is conditions(which is blank)
 	err:= response.Error
 	if(err != nil){
-		log.Fatal("Could not find all books")
+		
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message":"All books fetch Failed"},
 		)
