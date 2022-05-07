@@ -49,5 +49,6 @@ Next we start writing to the main.go file for :
 [GoLang Setup and Tutorial](https://youtu.be/yyUHQIec83I)
 [Postgres Setup for Ubuntu 20.04](https://www.cherryservers.com/blog/how-to-install-and-setup-postgresql-server-on-ubuntu-20-04)
 [Playlist with GO-Fiber and PostgresQL](https://youtube.com/playlist?list=PL5dTjWUk_cPaKHFvmMct_VG5vIU4piYv4)
+[GORM models](https://gorm.io/docs/models.html)
 
 ---
