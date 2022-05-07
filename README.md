@@ -18,13 +18,13 @@ go run main.go
 
 # Steps followed to build the Project
 
-## Initialise Module for the project
+## <u> Initialise Module for the project</u>
 We will add a `go.mod` file with link to our repo with the command in the root directory:
 ```
 go mod init github.com/sswastik02/Books-API
 ```
 
-## Basic Directory Structure
+## <u> Basic Directory Structure</u>
 Created the files and folders manually, forming the following directory tree
 
 ```
@@ -36,19 +36,69 @@ Created the files and folders manually, forming the following directory tree
     └── storage/
 ```
 
-## Writing to main.go
+## <u> Writing to main.go</u>
 Next we start writing to the main.go file for : 
 * Import Neccessary Go Libraries(Such as Fiber and Gorm)
 * Importing .env
+* Connect with Database
 * Initialise Fiber Framework
 * Write routes and functions
+
+## <u> Writing Models</u>
+We write the book model required to store in the database in the models folder along with the migrate method
+
+## <u> Writing storage</u>
+This Step includes making configuration to connect with postgresSQL
+
+## <u> Writing .env file </u>
+
+You need to create a postgres database on your localhost before writing the env file
+
+<span style="color:grey">In the following, keep in mind the < angular brackets > are to denote variables you have to set yourself. In the actual, omit the <> </span>
+
+The basic structure of the file looks like : 
+
+```
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=<username>
+DB_PASS=<password>
+DB_NAME=<dbname>
+DB_SSLMODE=disable
+
+```
+
+# Testing
+
+**Using curl 7.68.0**
+
+### GET
+```
+curl localhost:8000/api/books
+curl localhost:8000/api/getBook/<integer>
+```
+
+### POST
+
+```
+curl -d "title=<title>;&author=<author>&publisher=<publisher>" -X POST localhost:8000/api/entryBook
+```
+
+### DELETE
+
+```
+curl -X DELETE localhost:8000/api/removeBook/<integer>
+```
+
 
 ---
 ### Resources
 
-[GoLang Setup and Tutorial](https://youtu.be/yyUHQIec83I)
-[Postgres Setup for Ubuntu 20.04](https://www.cherryservers.com/blog/how-to-install-and-setup-postgresql-server-on-ubuntu-20-04)
+[GoLang Setup and Tutorial](https://youtu.be/yyUHQIec83I)<br>
+[Postgres Setup for Ubuntu 20.04](https://www.cherryservers.com/blog/how-to-install-and-setup-postgresql-server-on-ubuntu-20-04)<br>
 [Playlist with GO-Fiber and PostgresQL](https://youtube.com/playlist?list=PL5dTjWUk_cPaKHFvmMct_VG5vIU4piYv4)
-[GORM models](https://gorm.io/docs/models.html)
+[GORM models](https://gorm.io/docs/models.html)<br>
+[Posgresql Basic create user and database](https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e)<br>
 
 ---

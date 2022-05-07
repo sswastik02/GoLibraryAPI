@@ -72,7 +72,7 @@ func (r* Repository) getBookById(context *fiber.Ctx) error {
 		return nil
 	}
 
-	response := r.DB.Find(bookModel,id)
+	response := r.DB.Where("id = ?",id).First(bookModel)
 	err:= response.Error
 
 	if(err != nil) {
@@ -148,6 +148,15 @@ func(r* Repository) removeBookById(context *fiber.Ctx) error{
 		return err;
 	}
 
+	if(response.RowsAffected < 1){ // This does not show as error while delete
+		context.Status(http.StatusNotFound).JSON(
+			&fiber.Map{
+				"message":"ID does not exist",
+			},
+		)
+		return nil;
+	}
+
 	context.Status(http.StatusOK).JSON(
 		&fiber.Map{
 			"message":"Removed Book Successfully",
@@ -170,6 +179,8 @@ api.Get("/books",r.getAllBooks)
 api.Get("/getBook/:id",r.getBookById)
 api.Post("/entryBook",r.entryBook)
 api.Delete("/removeBook/:id",r.removeBookById)
+
+// fiber handles the errors returned by these functions with a default internal server error	
 
 }
 
@@ -201,6 +212,13 @@ func main(){
 
 	if(err != nil){
 		log.Fatal("Could not load database")
+	}
+
+	// -------------------------------- Migrate the Database -----------------------
+
+	err = models.Migrate(db)
+	if(err != nil){
+		log.Fatal("Could not Migrate Database")
 	}
 
 	// -----------------------------Initialise a Repository containing the Database--------------------
