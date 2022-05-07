@@ -3,9 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
+	"github.com/sswastik02/Books-API/models"
+	"github.com/sswastik02/Books-API/storage"
 	"gorm.io/gorm"
 )
 
@@ -21,6 +24,7 @@ type Repository struct {
 
 // ======================================= Methods for the API endpoints =====================================
 
+// --------------------------------------- Entry Book Method --------------------------
 func(r *Repository) entryBook(context *fiber.Ctx)error{
 	
 	book := Book{}
@@ -53,6 +57,44 @@ func(r *Repository) entryBook(context *fiber.Ctx)error{
 
 }
 
+// --------------------------------------- Get Book By ID Method --------------------------
+
+func (r* Repository) getBookById(context *fiber.Ctx) error {
+	bookModel := &models.Book{}
+	id := context.Params("id")
+
+	if(id == ""){
+		context.Status(http.StatusInternalServerError).JSON(
+			&fiber.Map{
+				"message":"ID needs to be present",
+			},
+		)
+		return nil
+	}
+
+	response := r.DB.Find(bookModel,id)
+	err:= response.Error
+
+	if(err != nil) {
+		context.Status(http.StatusBadRequest).JSON(
+			&fiber.Map{
+				"message":"Could Not Fetch with ID",
+			},
+		)
+		return err
+	}
+
+	context.Status(http.StatusOK).JSON(
+		&fiber.Map{
+			"message":"Fetch with ID Successful",
+			"data":bookModel,
+		},
+	)
+	return nil
+}
+
+// --------------------------------------- Get All Books Method --------------------------
+
 func (r *Repository) getAllBooks(context *fiber.Ctx) error {
 	
 	bookModels := &[]models.Book{}
@@ -78,9 +120,45 @@ func (r *Repository) getAllBooks(context *fiber.Ctx) error {
 	return nil
 }
 
+// --------------------------------------- Remove Book Method --------------------------
+
+func(r* Repository) removeBookById(context *fiber.Ctx) error{
+	bookModel:= &models.Book{}
+	// It will hold the Book to be deleted from the find
+	id:= context.Params("id")
+
+	if (id == ""){
+		context.Status(http.StatusInternalServerError).JSON(
+			&fiber.Map{
+				"message":"ID needs to be present",
+			},
+		)
+		return nil
+	}
+
+	response:= r.DB.Delete(bookModel,id)
+
+	err:= response.Error
+	if(err != nil){
+		context.Status(http.StatusBadRequest).JSON(
+			&fiber.Map{
+				"message":"Could Not Delete with ID",
+			},
+		)
+		return err;
+	}
+
+	context.Status(http.StatusOK).JSON(
+		&fiber.Map{
+			"message":"Removed Book Successfully",
+		},
+	)
+	return nil
+}
 
 
-// ====================================== Method to setup routes ============================================
+
+// =========================================== Method to setup routes ============================================
 
 func(r *Repository) SetupRoutes(app *fiber.App){ 
 // this is how a member function of struct looks(because class is not there in go)
@@ -109,6 +187,15 @@ func main(){
 	}
 
 	// -------------------------------- Load Configuration from env file -----------------------
+
+	config:= &storage.Config{ // & creates a pointer to a structure with data as declared
+		Host: os.Getenv("DB_HOST") ,
+		Port: os.Getenv("DB_PORT"),
+		User: os.Getenv("DB_USER"),
+		Password: os.Getenv("DB_PASS"),
+		DBName:os.Getenv("DB_NAME"),
+		SSLMode:os.Getenv("DB_SSLMODE"),
+	}
 
 	db, err := storage.NewConnection(config)
 
