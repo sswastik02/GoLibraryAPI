@@ -29,7 +29,7 @@ func(r *Repository) entryBook(context *fiber.Ctx)error{
 		context.Status(http.StatusUnprocessableEntity).JSON(
 			&fiber.Map{"message":"request failed"},
 		)
-		return err
+		return nil
 	}
 
 	response := r.DB.Create(&book)
@@ -40,7 +40,7 @@ func(r *Repository) entryBook(context *fiber.Ctx)error{
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message":"Could not Create Book"},
 		)
-		return err
+		return nil
 	}
 
 	context.Status(http.StatusOK).JSON(
@@ -75,7 +75,7 @@ func (r* Repository) getBookById(context *fiber.Ctx) error {
 				"message":"Could Not Fetch with ID",
 			},
 		)
-		return err
+		return nil
 	}
 
 	context.Status(http.StatusOK).JSON(
@@ -102,7 +102,7 @@ func (r *Repository) getAllBooks(context *fiber.Ctx) error {
 		context.Status(http.StatusBadRequest).JSON(
 			&fiber.Map{"message":"All books fetch Failed"},
 		)
-		return err
+		return nil
 	}
 
 	context.Status(http.StatusOK).JSON(
@@ -139,7 +139,7 @@ func(r* Repository) removeBookById(context *fiber.Ctx) error{
 				"message":"Could Not Delete with ID",
 			},
 		)
-		return err;
+		return nil;
 	}
 
 	if(response.RowsAffected < 1){ // This does not show as error while delete

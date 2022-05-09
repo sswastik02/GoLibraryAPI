@@ -26,7 +26,7 @@ func(r* Repository) signup(context *fiber.Ctx) error{
 				"message":"request failed",
 			},
 		)
-		return err
+		return nil
 	}
 
 	if(user.Username == "" || user.Password == "") {
@@ -74,7 +74,7 @@ func(r* Repository) signup(context *fiber.Ctx) error{
 	
 	if err != nil {
 		fmt.Printf("Could not hash Password for %s",user.Username)
-		return err;
+		return nil;
 	}
 
 	hashedUser := models.User{
@@ -91,7 +91,7 @@ func(r* Repository) signup(context *fiber.Ctx) error{
 				"message":"Could not create user",
 			},
 		)
-		return err
+		return nil
 	}
 
 	context.Status(http.StatusOK).JSON(
@@ -125,7 +125,7 @@ func (r* Repository) signin(context *fiber.Ctx) error {
 				"message":"request failed",
 			},
 		)
-		return err
+		return nil
 	}
 
 	hashedUser:= models.User{}
@@ -139,7 +139,7 @@ func (r* Repository) signin(context *fiber.Ctx) error {
 				"message":"Could not find user with that username",
 			},
 		)
-		return err
+		return nil
 		} 
 		
 		context.Status(http.StatusInternalServerError).JSON(
@@ -148,7 +148,7 @@ func (r* Repository) signin(context *fiber.Ctx) error {
 			},
 		)
 
-		return err
+		return nil
 
 	}
 
