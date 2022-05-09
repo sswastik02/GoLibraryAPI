@@ -22,7 +22,12 @@ func(r *Repository) SetupRoutes(app *fiber.App){
 	api.Post("/entryBook",r.entryBook)
 	api.Delete("/removeBook/:id",r.removeBookById)
 	
-	// fiber handles the errors returned by these functions with a default internal server error	
+	// fiber handles the errors returned by these functions with a default internal server error
+	
+	auth:=api.Group("/auth")
+
+	auth.Post("/signup",r.signup)
+	auth.Post("/signin",r.signin)
 	
 	}
 	

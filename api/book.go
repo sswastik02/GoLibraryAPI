@@ -13,8 +13,10 @@ type Book struct{
 	Publisher string `json:"publisher"`
 }
 
+// needed a seperate structure because the SQL Model had id parameter which will not be there on Create
 
-// ======================================= Methods for the API endpoints =====================================
+
+// ======================================= Methods for the Book API endpoints =====================================
 
 // --------------------------------------- Entry Book Method --------------------------
 func(r *Repository) entryBook(context *fiber.Ctx)error{

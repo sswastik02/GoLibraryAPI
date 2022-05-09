@@ -100,5 +100,6 @@ curl -X DELETE localhost:8000/api/removeBook/<integer>
 [Playlist with GO-Fiber and PostgresQL](https://youtube.com/playlist?list=PL5dTjWUk_cPaKHFvmMct_VG5vIU4piYv4)
 [GORM models](https://gorm.io/docs/models.html)<br>
 [Posgresql Basic create user and database](https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e)<br>
+[Implementing Password Authentication](https://www.sohamkamani.com/golang/password-authentication-and-storage/)<br>
 
 ---
