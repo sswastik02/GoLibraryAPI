@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/sswastik02/Books-API/models"
@@ -86,6 +87,16 @@ func(r* Repository) signup(context *fiber.Ctx) error{
 	err = response.Error
 
 	if err != nil {
+
+		if strings.Contains(err.Error(),"duplicate key value violates unique constraint") {
+			context.Status(http.StatusOK).JSON(
+				&fiber.Map{
+					"message":"User with that username already exists",
+				},
+			)
+			return nil
+		}
+
 		context.Status(http.StatusInternalServerError).JSON(
 			&fiber.Map{
 				"message":"Could not create user",
