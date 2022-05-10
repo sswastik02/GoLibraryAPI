@@ -1,9 +1,11 @@
-module github.com/sswastik02/Books-API
+module github.com/sswastik02/GoLibraryAPI
 
 go 1.18
 
 require (
 	github.com/gofiber/fiber/v2 v2.33.0
+	github.com/gofiber/jwt/v3 v3.2.11
+	github.com/golang-jwt/jwt/v4 v4.4.1
 	github.com/joho/godotenv v1.4.0
 	golang.org/x/crypto v0.0.0-20220214200702-86341886e292
 	gorm.io/driver/postgres v1.3.5

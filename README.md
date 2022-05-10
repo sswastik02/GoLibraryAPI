@@ -1,3 +1,24 @@
+# About Project
+
+## Simple Library Management System
+### Features
+```
+Add Book
+Get Book Info
+Get All Books Info
+Remove Book
+Users
+```
+### Technologies
+```
+Backend Framework   : Go-Fiber
+Database            : Postresql
+ORM                 : GORM
+Password Hashing    : HS256
+Session Management  : JWT Token
+```
+
+
 # Setup
 Clone the project and install required go packages
 ```
@@ -66,31 +87,9 @@ DB_USER=<username>
 DB_PASS=<password>
 DB_NAME=<dbname>
 DB_SSLMODE=disable
+JWT_SECRET=<jwtsecret>
 
 ```
-
-# Testing
-
-**Using curl 7.68.0**
-
-### GET
-```
-curl localhost:8000/api/books
-curl localhost:8000/api/getBook/<integer>
-```
-
-### POST
-
-```
-curl -d "title=<title>;&author=<author>&publisher=<publisher>" -X POST localhost:8000/api/entryBook
-```
-
-### DELETE
-
-```
-curl -X DELETE localhost:8000/api/removeBook/<integer>
-```
-
 
 ---
 ### Resources
@@ -100,6 +99,7 @@ curl -X DELETE localhost:8000/api/removeBook/<integer>
 [Playlist with GO-Fiber and PostgresQL](https://youtube.com/playlist?list=PL5dTjWUk_cPaKHFvmMct_VG5vIU4piYv4)
 [GORM models](https://gorm.io/docs/models.html)<br>
 [Posgresql Basic create user and database](https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e)<br>
-[Implementing Password Authentication](https://www.sohamkamani.com/golang/password-authentication-and-storage/)<br>
+[Implementing Password Authentication ](https://www.sohamkamani.com/golang/password-authentication-and-storage/)<br>
+[Implementing jwt in Fiber](https://github.com/gofiber/jwt)<br>
 
 ---

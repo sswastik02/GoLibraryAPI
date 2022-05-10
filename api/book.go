@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/sswastik02/Books-API/models"
+	"github.com/sswastik02/GoLibraryAPI/models"
 )
 
 type Book struct{
@@ -30,6 +30,14 @@ func(r *Repository) entryBook(context *fiber.Ctx)error{
 			&fiber.Map{"message":"request failed"},
 		)
 		return nil
+	}
+
+	if book.Author == "" || book.Publisher == "" || book.Title == "" {
+		context.Status(http.StatusOK).JSON(
+			&fiber.Map{
+				"message":"Title, Author or Publisher cannot be blank",
+			},
+		)
 	}
 
 	response := r.DB.Create(&book)
@@ -90,7 +98,7 @@ func (r* Repository) getBookById(context *fiber.Ctx) error {
 // --------------------------------------- Get All Books Method --------------------------
 
 func (r *Repository) getAllBooks(context *fiber.Ctx) error {
-	
+
 	bookModels := &[]models.Book{}
 	// It will contain the slice of the book model from models folder
 

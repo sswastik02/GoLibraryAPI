@@ -6,9 +6,9 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
-	"github.com/sswastik02/Books-API/api"
-	"github.com/sswastik02/Books-API/models"
-	"github.com/sswastik02/Books-API/storage"
+	"github.com/sswastik02/GoLibraryAPI/api"
+	"github.com/sswastik02/GoLibraryAPI/models"
+	"github.com/sswastik02/GoLibraryAPI/storage"
 )
 
 func main(){
@@ -51,6 +51,8 @@ func main(){
 	}
 
 	// ------------------------- Initialise Fiber Framework and routes using the repository-------------------
+
+	
 
 	app := fiber.New()
 	r.SetupRoutes(app)

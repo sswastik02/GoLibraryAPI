@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/sswastik02/Books-API/models"
+	"github.com/sswastik02/GoLibraryAPI/models"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -105,9 +105,22 @@ func(r* Repository) signup(context *fiber.Ctx) error{
 		return nil
 	}
 
+	token,duration,err:= generateToken(&user)
+
+	if err != nil {
+		context.Status(http.StatusInternalServerError).JSON(
+			&fiber.Map{
+				"message":"Could not generate JWT Token",
+			},
+		)
+		return nil
+	}
+
 	context.Status(http.StatusOK).JSON(
 		&fiber.Map{
 			"message":"User Created",
+			"token":token,
+			"duration":duration,
 		},
 	)
 
@@ -174,9 +187,22 @@ func (r* Repository) signin(context *fiber.Ctx) error {
 		return nil
 	}
 
+	token,duration,err:= generateToken(&user)
+
+	if err != nil {
+		context.Status(http.StatusInternalServerError).JSON(
+			&fiber.Map{
+				"message":"Could not generate JWT Token",
+			},
+		)
+		return nil
+	}
+
 	context.Status(http.StatusOK).JSON(
 		&fiber.Map{
 			"message":"User Signed in Successfully",
+			"token":token,
+			"duration":duration,
 		},
 	)
 	return nil
