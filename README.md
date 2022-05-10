@@ -27,7 +27,7 @@ go mod tidy
 ```
 
 ---
-**Note** : `go mod tidy` executes `go get` on the imports in main.go, you can also `go get` each library individually
+**Note** : `go mod tidy` ensures that the go.mod file matches the source code in the module, you can also `go get` each library individually
 
 ---
 

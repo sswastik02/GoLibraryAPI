@@ -20,6 +20,15 @@ func(r *Repository) SetupRoutes(app *fiber.App){
 	// It is a struct method
 
 	jwtSecret:=os.Getenv("JWT_SECRET")
+
+	app.Get("/",func(context *fiber.Ctx) error {
+		context.Status(http.StatusOK).JSON(
+			&fiber.Map{
+				"message":"Access all endpoints at /api",
+			},
+		)
+		return nil
+	})
 	
 	api:= app.Group("/api") // All endpoints will contain /api as prefix
 
