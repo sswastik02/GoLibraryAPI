@@ -20,7 +20,13 @@ Session Management  : JWT Token
 
 
 # Setup
-Clone the project and install required go packages
+
+## Local
+
+Clone the project and install required go packages 
+(replace `.env` contents with `.env.dev`)
+
+You need postgres to be installed on the system
 ```
 git clone https://github.com/sswastik02/Books-API
 go mod tidy
@@ -31,13 +37,24 @@ go mod tidy
 
 ---
 
-# Run
+### Run
 ```
 go run main.go
 ```
 
+## Docker
 
-# Steps followed to build the Project
+Alternatively, docker container can be built from the `docker-compose.yml` file
+(replace `.env` contents with `.env.prod`)
+
+You will need docker and docker-compose for this
+
+```
+docker-compose up
+```
+
+
+# Steps followed to build the Project Initially
 
 ## <u> Initialise Module for the project</u>
 We will add a `go.mod` file with link to our repo with the command in the root directory:
@@ -101,5 +118,6 @@ JWT_SECRET=<jwtsecret>
 [Posgresql Basic create user and database](https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e)<br>
 [Implementing Password Authentication ](https://www.sohamkamani.com/golang/password-authentication-and-storage/)<br>
 [Implementing jwt in Fiber](https://github.com/gofiber/jwt)<br>
+[Dockerizing Fiber with Postgresql](https://levelup.gitconnected.com/dockerized-crud-restful-api-with-go-gorm-jwt-postgresql-mysql-and-testing-61d731430bd8)
 
 ---
