@@ -105,25 +105,8 @@ func(r* Repository) signup(context *fiber.Ctx) error{
 		return nil
 	}
 
-	token,duration,err:= generateToken(&user)
-
-	if err != nil {
-		context.Status(http.StatusInternalServerError).JSON(
-			&fiber.Map{
-				"message":"Could not generate JWT Token",
-			},
-		)
-		return nil
-	}
-
-	context.Status(http.StatusOK).JSON(
-		&fiber.Map{
-			"message":"User Created",
-			"token":token,
-			"duration":duration,
-		},
-	)
-
+	
+	context.Redirect("/signin",http.StatusOK) // signin after signup
 	return nil
 
 }
