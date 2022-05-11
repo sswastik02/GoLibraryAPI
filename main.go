@@ -7,8 +7,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"github.com/sswastik02/GoLibraryAPI/api"
+	storage "github.com/sswastik02/GoLibraryAPI/database"
 	"github.com/sswastik02/GoLibraryAPI/models"
-	"github.com/sswastik02/GoLibraryAPI/storage"
 )
 
 func main(){
