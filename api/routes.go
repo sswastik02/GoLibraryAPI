@@ -2,10 +2,8 @@ package api
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/gofiber/fiber/v2"
-	jwtware "github.com/gofiber/jwt/v3"
 	"gorm.io/gorm"
 )
 
@@ -19,7 +17,7 @@ func(r *Repository) SetupRoutes(app *fiber.App){
 	// this is how a member function of struct looks(because class is not there in go)
 	// It is a struct method
 
-	jwtSecret:=os.Getenv("JWT_SECRET")
+	
 
 	app.Get("/",func(context *fiber.Ctx) error {
 		context.Status(http.StatusOK).JSON(
@@ -34,17 +32,7 @@ func(r *Repository) SetupRoutes(app *fiber.App){
 
 	lib:=api.Group("/library")
 
-	lib.Use(jwtware.New(jwtware.Config{
-		ErrorHandler: func(context *fiber.Ctx, err error) error {
-			context.Status(http.StatusUnauthorized).JSON(
-				&fiber.Map{
-					"message":"Unauthorized",
-				},
-			)
-			return nil	
-		},
-		SigningKey: []byte(jwtSecret),
-	}))
+	lib.Use(jwtMiddleware())
 
 	// Adding JWT auth to lib group
 
@@ -60,6 +48,7 @@ func(r *Repository) SetupRoutes(app *fiber.App){
 
 	auth.Post("/signup",r.signup)
 	auth.Post("/signin",r.signin)
+	auth.Post("/refreshTokens",r.RefreshTokenPair)
 	
 	}
 	

@@ -106,8 +106,9 @@ func(r* Repository) signup(context *fiber.Ctx) error{
 	}
 
 	
-	context.Redirect("/signin",http.StatusOK) // signin after signup
-	return nil
+	context.Path("/api/auth/signin") // signin after signup
+	return context.RestartRouting()
+	
 
 }
 
@@ -170,7 +171,7 @@ func (r* Repository) signin(context *fiber.Ctx) error {
 		return nil
 	}
 
-	token,duration,err:= generateToken(&user)
+	tokenPair,err:= generateTokenPair(&user)
 
 	if err != nil {
 		context.Status(http.StatusInternalServerError).JSON(
@@ -184,8 +185,8 @@ func (r* Repository) signin(context *fiber.Ctx) error {
 	context.Status(http.StatusOK).JSON(
 		&fiber.Map{
 			"message":"User Signed in Successfully",
-			"token":token,
-			"duration":duration,
+			"access_token":tokenPair["access_token"],
+			"refresh_token":tokenPair["refresh_token"],
 		},
 	)
 	return nil

@@ -31,6 +31,8 @@ func main(){
 		SSLMode:os.Getenv("DB_SSLMODE"),
 	}
 
+	api.InitializeJwtSecret(os.Getenv("JWT_SECRET"))
+
 	db, err := storage.NewConnection(config)
 
 	if(err != nil){
