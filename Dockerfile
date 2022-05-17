@@ -19,4 +19,6 @@ RUN go build -o main .
 
 EXPOSE 8000
 
-CMD ["/app/main"]
+ENTRYPOINT ["/app/main","-runserver"]
+
+# when using command line arguments entrypoint should be used over CMD

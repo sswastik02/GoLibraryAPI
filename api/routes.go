@@ -30,26 +30,36 @@ func(r *Repository) SetupRoutes(app *fiber.App){
 	
 	api:= app.Group("/api") // All endpoints will contain /api as prefix
 
-	lib:=api.Group("/library")
 
-	lib.Use(jwtMiddleware())
-
-	// Adding JWT auth to lib group
-
-	
-	lib.Get("/books",r.getAllBooks)
-	lib.Get("/getBook/:id",r.getBookById)
-	lib.Post("/entryBook",r.entryBook)
-	lib.Delete("/removeBook/:id",r.removeBookById)
-	
-	// fiber handles the errors returned by these functions with a default internal server error
-	
 	auth:=api.Group("/auth")
+	lib:=api.Group("/library")
+	admin := api.Group("/admin")
+
+	lib.Use(jwtUserMiddleware())
+	// Adding JWT auth to lib group
+	admin.Use(jwtAdminMiddleware())
+
+
 
 	auth.Post("/signup",r.signup)
 	auth.Post("/signin",r.signin)
 	auth.Post("/refreshTokens",r.RefreshTokenPair)
+
 	
+	lib.Get("/books",r.getAllBooks)
+	lib.Get("/getBook/:id",r.getBookById)
+
+	lib.Post("/entryBook",jwtAdminMiddleware(),r.entryBook)
+	lib.Delete("/removeBook/:id",jwtAdminMiddleware(),r.removeBookById) // this is how you implement middleware in each 
+	
+	// fiber handles the errors returned by these functions with a default internal server error
+	
+
+
+	admin.Post("/create",r.AdminSignup)
+	admin.Post("/makeAdmin",r.MakeOrRemoveAdmin(true))
+	admin.Post("/removeAdmin",r.MakeOrRemoveAdmin(false))
+	admin.Delete("/deleteUser",r.DeleteUser)
 	}
 	
 	// ============================================================================================================

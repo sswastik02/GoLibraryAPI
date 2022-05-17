@@ -3,11 +3,22 @@
 ## Simple Library Management System
 ### Features
 ```
-Add Book
-Get Book Info
-Get All Books Info
-Remove Book
-Users
+Book : 
+    Add Book (Administrator)
+    Get Book Info
+    Get All Books Info
+    Remove Book (Administrator)
+
+Users : 
+    User Signup
+    User Signin
+    Refresh JWT token pair
+    
+    Admin Signup  (Administrator)
+    Give Admin Role (Administrator)
+    Revoke Admin Role (Administrator)
+    Delete any User (Administrator)
+
 ```
 ### Technologies
 ```
@@ -29,7 +40,7 @@ Clone the project and install required go packages
 You need postgres to be installed on the system
 ```
 git clone https://github.com/sswastik02/Books-API
-go mod tidy
+go mod tidy # or go mod download
 ```
 
 ---
@@ -37,9 +48,14 @@ go mod tidy
 
 ---
 
-### Run
+### Create Admin
 ```
-go run main.go
+go run main.go -createadmin
+```
+
+### Run Server
+```
+go run main.go -runserver
 ```
 
 ## Docker
@@ -49,10 +65,20 @@ Alternatively, docker container can be built from the `docker-compose.yml` file
 
 You will need docker and docker-compose for this
 
+### Create Admin
+```
+docker exec -it <go_fiber_container_name> go run main.go -createadmin
+```
+<span style="color:grey"> go fiber container name is the name of the container running the go fiber backend that is running on your system. You can view it by running `docker ps`
+
+### Run Server
+
 ```
 docker-compose up
 ```
 
+
+<span style="color:grey">Note : You need to make sure nothing is already running on the ports 8000 and 5432. If there is you need to stop them</span>
 
 # Steps followed to build the Project Initially
 
