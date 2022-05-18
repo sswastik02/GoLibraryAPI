@@ -9,7 +9,8 @@ services:
     volumes:
       - api:/usr/src/app/
     depends_on:
-      - db          
+      - db
+      - cache          
     networks:
       - netapi
 
@@ -26,6 +27,19 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - netapi
+  
+  cache:
+    image: redis:6.2-alpine
+    container_name: LibraryAPI_Cache
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    command: > 
+      --requirepass ${REDIS_PASS}
+    ports:
+      - '6379:6379'
     networks:
       - netapi
     

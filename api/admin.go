@@ -1,48 +1,12 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/sswastik02/GoLibraryAPI/models"
-	"gorm.io/gorm"
 )
 
-func(r* Repository) AdminDBOperations(username string, desiredUser *models.User) (int, error) {
-	if username == "" {
-		httpcode, err := r.CreateUser(desiredUser)
-		return httpcode,err
-	}
-	var response *gorm.DB
-	if desiredUser == nil {
-		response = r.DB.Where("username = ?",username).Delete(&models.User{})
-	} else {
-		// response = r.DB.Where("username = ?",username).Updates(
-		// 	models.User{
-		// 		Username: desiredUser.Username,
-		// 		Admin: desiredUser.Admin,
-		// 	},
-		// ) 
-		//  Unfortunately the above method does not work to update many fields because it ignores values like 0 and false
-		
-		desiredUserMap := make(map[string]interface {})
-		desiredUserMap["username"] = desiredUser.Username
-		desiredUserMap["admin"] = desiredUser.Admin
-		response = r.DB.Model(&models.User{}).Where("username = ?",username).Updates(&desiredUserMap	)
-	}
-		err := response.Error
-
-		if err != nil {
-			return http.StatusInternalServerError,err
-		}
-
-		if response.RowsAffected < 1 {
-			return http.StatusBadRequest, fmt.Errorf("user with that username not found")
-		}
-
-		return http.StatusOK,nil
-}
 
 func(r* Repository) DeleteUser(context *fiber.Ctx) error {
 	user := models.User{}

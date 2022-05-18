@@ -1,4 +1,4 @@
-package storage
+package database
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type Config struct{
+type PGConfig struct{
 	Host		string
 	Port		string
 	User		string
@@ -18,7 +18,7 @@ type Config struct{
 
 // Config structure holds the information for the Database
 
-func NewConnection(config *Config)(*gorm.DB, error){
+func NewConnection(config *PGConfig)(*gorm.DB, error){
 	// This function will open a new database using the config file provided
 	dsn:= fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",

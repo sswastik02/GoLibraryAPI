@@ -4,20 +4,20 @@
 ### Features
 ```
 Book : 
-    Add Book (Administrator)
+    Add Book          (Administrator)
     Get Book Info
     Get All Books Info
-    Remove Book (Administrator)
+    Remove Book       (Administrator)
 
 Users : 
     User Signup
     User Signin
     Refresh JWT token pair
     
-    Admin Signup  (Administrator)
-    Give Admin Role (Administrator)
-    Revoke Admin Role (Administrator)
-    Delete any User (Administrator)
+    Admin Signup      (Administrator)
+    Give Admin Role   (Administrator)
+    Revoke Admin Role (Administrator) [Blacklisting JWT access token for its lifetime]
+    Delete any User   (Administrator) [Blacklisting JWT access token for its lifetime]
 
 ```
 ### Technologies
@@ -27,6 +27,7 @@ Database            : Postresql
 ORM                 : GORM
 Password Hashing    : HS256
 Session Management  : JWT Token
+Cache               : Redis
 ```
 
 
@@ -69,12 +70,12 @@ You will need docker and docker-compose for this
 ```
 docker exec -it <go_fiber_container_name> go run main.go -createadmin
 ```
-<span style="color:grey"> go fiber container name is the name of the container running the go fiber backend that is running on your system. You can view it by running `docker ps`
+<span style="color:grey"> go fiber container name is the name of the container running the go fiber backend that is running on your system. You can view it by running `docker ps`</span>
 
 ### Run Server
 
 ```
-docker-compose up
+docker-compose up --build
 ```
 
 
@@ -134,6 +135,8 @@ JWT_SECRET=<jwtsecret>
 
 ```
 
+<span style="color:grey"> The above .env file is outdated as it was during the inital steps of the project. You can have a look at `env.dev` or `env.prod` for reference</span>
+
 ---
 ### Resources
 
@@ -146,5 +149,7 @@ JWT_SECRET=<jwtsecret>
 [Implementing JWT in Fiber](https://github.com/gofiber/jwt)<br>
 [Implemeting JWT with refresh token](https://medium.com/monstar-lab-bangladesh-engineering/jwt-auth-in-go-part-2-refresh-tokens-d334777ca8a0)
 [Dockerizing Fiber with Postgresql](https://levelup.gitconnected.com/dockerized-crud-restful-api-with-go-gorm-jwt-postgresql-mysql-and-testing-61d731430bd8)
+[Setting up Redis on Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04)
+
 
 ---

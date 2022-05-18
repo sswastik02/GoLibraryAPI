@@ -39,7 +39,7 @@ func main(){
 
 	// -------------------------------- Load Configuration from env file -----------------------
 
-	config:= &database.Config{ // & creates a pointer to a structure with data as declared
+	pgconfig:= &database.PGConfig{ // & creates a pointer to a structure with data as declared
 		Host: os.Getenv("DB_HOST") ,
 		Port: os.Getenv("DB_PORT"),
 		User: os.Getenv("DB_USER"),
@@ -48,14 +48,27 @@ func main(){
 		SSLMode:os.Getenv("DB_SSLMODE"),
 	}
 
+	rdconfig := database.RDConfig{
+		Addr: os.Getenv("REDIS_HOST")+":"+os.Getenv("REDIS_PORT"),
+		Password: os.Getenv("REDIS_PASS"),
+	}
+
 	api.InitializeJwtSecret(os.Getenv("JWT_SECRET"))
 
-	db, err := database.NewConnection(config)
+	db, err := database.NewConnection(pgconfig)
 
 	if(err != nil){
 		log.Fatal("Could not load database")
 	}
 
+	rdb,err := database.CreateClient(&rdconfig)
+
+	defer rdb.Close()
+
+	if err != nil {
+		log.Fatal("Could not load redis : ",err.Error())
+	}
+	
 	// -------------------------------- Migrate the Database -----------------------
 
 	err = models.Migrate(db)
@@ -67,6 +80,7 @@ func main(){
 
 	r := api.Repository{
 		DB: db,
+		Client: rdb,
 	}
 
 	//------------------------------------- Run Server and Create Admin ------------------------------------

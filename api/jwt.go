@@ -83,6 +83,18 @@ func generateTokenPair(user *models.User) (map[string]string,error) {
 
 }
 
+func getTokenFromContext(context *fiber.Ctx) (*jwt.Token,error) {
+	bearer := context.GetReqHeaders()["Authorization"]
+	tokenString := strings.Split(bearer, "Bearer ")[1]
+	token,err := jwt.Parse(tokenString,verifySignature)
+	
+	if err != nil {
+		return nil,fmt.Errorf("unexpected signing method")
+	}
+
+	return token,nil
+}
+
 
 
 
@@ -90,12 +102,10 @@ func checkIfValidAccessToken(context *fiber.Ctx,checkIfAdmin bool) error {
 	// Allow only JWT tokens with the access claims 
 
 
-	bearer := context.GetReqHeaders()["Authorization"]
-	tokenString := strings.Split(bearer, "Bearer ")[1]
-	token,err := jwt.Parse(tokenString,verifySignature)
-	
+	token,err:= getTokenFromContext(context)
+
 	if err != nil {
-		return fmt.Errorf("unexpected signing method")
+		return err
 	}
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -109,45 +119,13 @@ func checkIfValidAccessToken(context *fiber.Ctx,checkIfAdmin bool) error {
 	}
 
 	if checkIfAdmin {
-		if !claims["admin"].(bool) {
+		admin :=claims["admin"].(bool)
+		if !admin {
 			return fmt.Errorf("only Administrators can access this endpoint")
 		}
 	}
 
 	return nil
-}
-
-
-
-
-func accessTokenJWTSuccessHandler(context *fiber.Ctx) error {
-	
-	err := checkIfValidAccessToken(context,false)
-
-	if err != nil {
-		context.Status(http.StatusUnauthorized).JSON(
-			&fiber.Map{
-				"message":err.Error(),
-			},
-		)
-		return nil
-	}
-	return context.Next()
-}
-
-
-func accessTokenJWTAndAdminSuccessHandler(context *fiber.Ctx) error {
-	err := checkIfValidAccessToken(context,true)
-
-	if err != nil {
-		context.Status(http.StatusUnauthorized).JSON(
-			&fiber.Map{
-				"message":err.Error(),
-			},
-		)
-		return nil
-	}
-	return context.Next()
 }
 
 
@@ -161,12 +139,66 @@ func jwtErrorHandler (context *fiber.Ctx, err error) error {
 	return nil	
 }
 
+func(r *Repository) getBlackListAndAdminSuccessHandler(checkIfAdmin bool) (func (*fiber.Ctx) error) {
+
+	return func (context *fiber.Ctx) error {
+	err := r.BlackListAndAdminJWTFilter(context,checkIfAdmin)
+
+	// Unfortunately adding this filter logic to Filter in the jwtware config will not work because
+	// The filter present there is to accept and not reject
+
+	if err != nil {
+		context.Status(http.StatusUnauthorized).JSON(
+			&fiber.Map{
+				"message": err.Error() ,
+			},
+		)
+		return nil
+	}
+	return context.Next()
+	}
+}
 
 
 
-func jwtUserMiddleware() (func(*fiber.Ctx) error){
+func(r* Repository) BlackListAndAdminJWTFilter(context *fiber.Ctx,checkIfAdmin bool) error {
+	err := checkIfValidAccessToken(context,checkIfAdmin)
+	
+	if err != nil {
+		return err
+	}
+
+
+	token, err := getTokenFromContext(context)
+
+	if err != nil {
+		return err
+	}
+
+	user := getUserFromJWT(token)
+	s,err := r.RdbClientOperations(user)
+
+	if err != nil {
+		return err
+	}
+
+	if s == "NoAccess" {
+		return fmt.Errorf("user is deleted")
+	}
+
+	if checkIfAdmin && s == "NoAdmin" {
+		return fmt.Errorf("user has no administraive privileges anymore")
+	}
+
+	return nil
+}
+
+
+
+
+func jwtUserMiddleware(r *Repository) (func(*fiber.Ctx) error){
 	return jwtware.New(jwtware.Config{
-		SuccessHandler: accessTokenJWTSuccessHandler,
+		SuccessHandler: r.getBlackListAndAdminSuccessHandler(false),
 		ErrorHandler: jwtErrorHandler,
 		
 		SigningKey: []byte(jwtSecret),
@@ -176,9 +208,9 @@ func jwtUserMiddleware() (func(*fiber.Ctx) error){
 
 
 
-func jwtAdminMiddleware() (func(*fiber.Ctx) error ){
+func jwtAdminMiddleware(r* Repository) (func(*fiber.Ctx) error ){
 	return jwtware.New(jwtware.Config{
-		SuccessHandler: accessTokenJWTAndAdminSuccessHandler,
+		SuccessHandler: r.getBlackListAndAdminSuccessHandler(true),
 		ErrorHandler: jwtErrorHandler,
 		SigningKey: []byte(jwtSecret),
 	})

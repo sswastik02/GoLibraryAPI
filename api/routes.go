@@ -4,12 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
-
-type Repository struct {
-	DB *gorm.DB
-}
 
 // =========================================== Method to setup routes ============================================
 
@@ -35,9 +30,9 @@ func(r *Repository) SetupRoutes(app *fiber.App){
 	lib:=api.Group("/library")
 	admin := api.Group("/admin")
 
-	lib.Use(jwtUserMiddleware())
+	lib.Use(jwtUserMiddleware(r))
 	// Adding JWT auth to lib group
-	admin.Use(jwtAdminMiddleware())
+	admin.Use(jwtAdminMiddleware(r))
 
 
 
@@ -49,8 +44,8 @@ func(r *Repository) SetupRoutes(app *fiber.App){
 	lib.Get("/books",r.getAllBooks)
 	lib.Get("/getBook/:id",r.getBookById)
 
-	lib.Post("/entryBook",jwtAdminMiddleware(),r.entryBook)
-	lib.Delete("/removeBook/:id",jwtAdminMiddleware(),r.removeBookById) // this is how you implement middleware in each 
+	lib.Post("/entryBook",jwtAdminMiddleware(r),r.entryBook)
+	lib.Delete("/removeBook/:id",jwtAdminMiddleware(r),r.removeBookById) // this is how you implement middleware in each 
 	
 	// fiber handles the errors returned by these functions with a default internal server error
 	
