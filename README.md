@@ -3,6 +3,11 @@
 ## Simple Library Management System
 ### Features
 ```
+Issue : 
+    Add Issue (Administrator)
+    Get Issues
+    Delete Issue (Administrator)
+
 Book : 
     Add Book          (Administrator)
     Get Book Info
