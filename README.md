@@ -3,10 +3,6 @@
 ## Simple Library Management System
 ### Features
 ```
-Issue : 
-    Add Issue (Administrator)
-    Get Issues
-    Delete Issue (Administrator)
 
 Book : 
     Add Book          (Administrator)
@@ -23,6 +19,11 @@ Users :
     Give Admin Role   (Administrator)
     Revoke Admin Role (Administrator) [Blacklisting JWT access token for its lifetime]
     Delete any User   (Administrator) [Blacklisting JWT access token for its lifetime]
+
+Issue : 
+    Add Issue    (Administrator)
+    Get Issues
+    Delete Issue (Administrator)
 
 ```
 ### Technologies
