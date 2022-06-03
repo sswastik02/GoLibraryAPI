@@ -150,6 +150,7 @@ JWT_SECRET=<jwtsecret>
 [Implemeting JWT with refresh token](https://medium.com/monstar-lab-bangladesh-engineering/jwt-auth-in-go-part-2-refresh-tokens-d334777ca8a0)
 [Dockerizing Fiber with Postgresql](https://levelup.gitconnected.com/dockerized-crud-restful-api-with-go-gorm-jwt-postgresql-mysql-and-testing-61d731430bd8)
 [Setting up Redis on Ubuntu](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04)
+[Overview of the GORM object relational mapper](https://www.youtube.com/watch?v=nVD9acHituc)
 
 
 ---

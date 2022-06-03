@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/gofiber/fiber/v2"
 	"github.com/sswastik02/GoLibraryAPI/models"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -92,4 +93,14 @@ func(r* Repository) CheckUserCredentials(user *models.User,hashedUser *models.Us
 	err := bcrypt.CompareHashAndPassword([]byte(hashedUser.Password),[]byte(user.Password))
 
 	return err == nil
+}
+
+func getUserFromContext(context *fiber.Ctx) (*models.User, error) {
+	token, err := getTokenFromContext(context)
+	if err != nil {
+		return nil,err
+	}
+	user := getUserFromJWT(token)
+	return &user,nil
+
 }

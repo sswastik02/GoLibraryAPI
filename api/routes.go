@@ -29,6 +29,7 @@ func(r *Repository) SetupRoutes(app *fiber.App){
 	auth:=api.Group("/auth")
 	lib:=api.Group("/library")
 	admin := api.Group("/admin")
+	issue:= lib.Group("/issue")
 
 	lib.Use(jwtUserMiddleware(r))
 	// Adding JWT auth to lib group
@@ -55,6 +56,10 @@ func(r *Repository) SetupRoutes(app *fiber.App){
 	admin.Post("/makeAdmin",r.MakeOrRemoveAdmin(true))
 	admin.Post("/removeAdmin",r.MakeOrRemoveAdmin(false))
 	admin.Delete("/deleteUser",r.DeleteUser)
+
+	issue.Post("/entryIssue",jwtAdminMiddleware(r),r.entryIssue)
+	issue.Get("/getIssues",r.getIssues)
+	issue.Delete("/deleteIssue/:id",jwtAdminMiddleware(r),r.deleteIssue)
 	}
 	
 	// ============================================================================================================

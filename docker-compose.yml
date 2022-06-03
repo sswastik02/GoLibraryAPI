@@ -43,7 +43,7 @@ services:
     networks:
       - netapi
     
-
+# volumes used to persist data
 volumes:
   api:
   postgres_data:                  

@@ -42,7 +42,7 @@ func verifySignature(refreshToken *jwt.Token) (interface{}, error) {
 
 func generateTokenPair(user *models.User) (map[string]string,error) {
 
-	accessTokenDuration := 2 * time.Minute
+	accessTokenDuration := 5 * time.Minute
 	refreshTokenDuration := 24 * time.Hour
 	// refreshTokenDuration := 5 * time.Minute // for testing purposes
 
@@ -176,7 +176,7 @@ func(r* Repository) BlackListAndAdminJWTFilter(context *fiber.Ctx,checkIfAdmin b
 	}
 
 	user := getUserFromJWT(token)
-	s,err := r.RdbClientOperations(user)
+	s,err := r.RdbClientOperations(user.Username)
 
 	if err != nil {
 		return err
@@ -220,10 +220,14 @@ func jwtAdminMiddleware(r* Repository) (func(*fiber.Ctx) error ){
 
 
 
-func getUserFromJWT(token *jwt.Token) string {
+func getUserFromJWT(token *jwt.Token) models.User {
 	claims:= token.Claims.(jwt.MapClaims)
-	user:= claims["sub"].(string)
-	return user
+	username:= claims["sub"].(string)
+	admin:= claims["admin"].(bool)
+	return models.User{
+		Username: username,
+		Admin: admin,
+	}
 }
 
 
